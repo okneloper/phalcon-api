@@ -1,17 +1,27 @@
 version: '3'
 
 services:
-  nginx:
-    image: nginx:1.13
-    ports:
-    - 80:80
-    volumes:
-    - .:/usr/share/nginx/html
-    - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf
-    depends_on:
-    - php
+    nginx:
+        image: nginx:1.13
+        ports:
+            - 80:80
+        volumes:
+            - .:/usr/share/nginx/html
+            - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf
+        depends_on:
+            - php
 
-  php:
-    image: mileschou/phalcon:7.2-fpm
-    volumes:
-    - .:/usr/share/nginx/html
+    php:
+        build: './docker/php'
+        volumes:
+            - .:/usr/share/nginx/html
+
+    mongo:
+        image: mongo:3.2
+        environment:
+            MONGODB_USER: mongo_user
+            MONGODB_PASS: mongo_pass
+        ports:
+            - 27017:27017
+        command: mongod --smallfiles --logpath=/dev/null # --quiet
+
