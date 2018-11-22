@@ -2,6 +2,8 @@
 
 namespace App\Middleware;
 
+use App\Auth;
+use App\Models\Repositories\UserRepository;
 use Lcobucci\JWT\Parser;
 use Okneloper\JwtValidators\SignatureValidator;
 use Okneloper\JwtValidators\Validator;
@@ -101,6 +103,10 @@ class Authenticate implements \Phalcon\Mvc\Micro\MiddlewareInterface
             $message = $validator->getErrors()[0];
             return $this->unauthorized($message);
         }
+
+        // user authenticated  by token
+        $user = UserRepository::getInstance()->findByUsername($token->getClaim('sub'));
+        Auth::setUser($user);
 
         return true;
     }

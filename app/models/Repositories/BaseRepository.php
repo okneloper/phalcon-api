@@ -12,7 +12,7 @@ abstract class BaseRepository extends MongoRepository
 {
     /**
      * Returns a new instance of the repository
-     * @return BaseRepository
+     * @return static
      */
     public static function getInstance()
     {

@@ -8,6 +8,10 @@ class MessagesController extends \Phalcon\Mvc\Controller
 {
     public function indexAction()
     {
+        $user = \App\Auth::getUser();
+
+        //$messages = MessagesRepository::getInstance()->
+
         return [
             'data' => [
                 []
