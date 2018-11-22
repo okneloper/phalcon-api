@@ -4,6 +4,7 @@ namespace App;
 
 use App\Middleware\Authenticate;
 use Lcobucci\JWT\Signer;
+use MongoDB\Client;
 use Okneloper\JwtValidators\SignatureValidator;
 use Phalcon\Config;
 use Phalcon\Di;
@@ -35,6 +36,7 @@ class Initializer
     {
         $this->initDi();
         $this->initConfig($this->app->di);
+        $this->initServices();
         $this->initLoader();
         $this->initRoutes();
         $this->attachMiddleware();
@@ -81,20 +83,6 @@ class Initializer
     {
         // Create a DI
         $di = new FactoryDefault();
-
-        // Setup a base URI
-        $di->set(
-            'url',
-            function () {
-                $url = new UrlProvider();
-                $url->setBaseUri('/');
-                return $url;
-            }
-        );
-
-        $di->set(SignatureValidator::class, function () use ($di) {
-            return new SignatureValidator($di->get('config')->SECRET,  new Signer\Hmac\Sha256());
-        });
     }
 
     private function initLoader()
@@ -130,7 +118,37 @@ class Initializer
         $di->set('config', function () {
             return new Config([
                 'SECRET' => 'EAXrmVSJ3ONqz2YaUTFr8cVvd2dZpAB2jUZFNxti',
+                'mongodb' => [
+                    'host' => env('MONGODB_HOST', 'mongo'),
+                    'db' => env('MONGODB_DB', 'test'),
+                ],
             ]);
+        });
+    }
+
+    private function initServices()
+    {
+        $di = $this->app->di;
+
+        $config = $di->get('config');
+
+        // Setup a base URI
+        $di->set(
+            'url',
+            function () {
+                $url = new UrlProvider();
+                $url->setBaseUri('/');
+                return $url;
+            }
+        );
+
+        $di->set(SignatureValidator::class, function () use ($di) {
+            return new SignatureValidator($di->get('config')->SECRET,  new Signer\Hmac\Sha256());
+        });
+
+        $di->set('mongo', function () use ($config) {
+            $db = $config->mongodb->db;
+            return (new Client("mongodb://{$config->mongodb->host}"))->selectDatabase($db);
         });
     }
 }

@@ -13,6 +13,6 @@ class Mongo
      */
     public static function getDb()
     {
-        return (new Client())->test;
+        return (new Client('mongodb://' . getenv('MONGODB_HOST')))->testing;
     }
 }
