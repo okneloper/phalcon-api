@@ -41,11 +41,12 @@ class MessageRepositoryTest extends \Codeception\Test\Unit
             'text' => 'Hello!'
         ]);
 
-        $id = MessageRepository::getInstance()->store($message);
+        $message = MessageRepository::getInstance()->store($message);
 
         $found_in_db = $this->mongo->messages->findOne([
-            '_id' => new \MongoDB\BSON\ObjectId($id),
+            '_id' => new \MongoDB\BSON\ObjectId($message->_id),
         ]);
+
 
         $this->assertNotNull($found_in_db);
         $this->assertEquals('Hello!', $found_in_db->text);

@@ -75,10 +75,25 @@ abstract class MongoRepository implements Repository
         return $this->newModel($result->getArrayCopy());
     }
 
-    public function store(Model $model)
+    /**
+     * @param Model $model
+     * @return Model
+     */
+    public function store(Model $model): Model
     {
+        $now = date('Y-m-d H:i:s');
+
+        if (!isset($model->_id)) {
+            $model->created_at = $now;
+        }
+        $model->updated_at = $now;
+
         $result = $this->collection->insertOne($model->toArray());
 
-        return $result->getInsertedId()->__toString();
+        if ($new_id = $result->getInsertedId()) {
+            $model->_id = $new_id;
+        }
+
+        return $model;
     }
 }

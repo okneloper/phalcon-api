@@ -6,8 +6,11 @@ use MongoDB\BSON\ObjectId;
 
 /**
  * Base model class
+ * @property null _id
+ * @property string created_at
+ * @property syring updated_at
  */
-abstract class Model
+abstract class Model implements \JsonSerializable
 {
     protected $attributes;
 
@@ -40,5 +43,10 @@ abstract class Model
     public function toArray()
     {
         return $this->attributes;
+    }
+
+    public function jsonSerialize()
+    {
+        return $this->toArray();
     }
 }
