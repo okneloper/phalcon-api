@@ -142,8 +142,12 @@ class Initializer
             }
         );
 
+        $di->set(Signer::class, function () {
+            return new Signer\Hmac\Sha256();
+        });
+
         $di->set(SignatureValidator::class, function () use ($di) {
-            return new SignatureValidator($di->get('config')->SECRET,  new Signer\Hmac\Sha256());
+            return new SignatureValidator($di->get('config')->SECRET,  $di->get(Signer::class));
         });
 
         $di->set('mongo', function () use ($config) {

@@ -22,7 +22,8 @@ class ApiTester extends \Codeception\Actor
 
     public function authenticate()
     {
-        $this->loginWith('username', 'password');
+        // @todo move this to a config or something
+        $this->loginWith('user@exmaple.com', 'password1');
     }
 
    /**
@@ -31,6 +32,8 @@ class ApiTester extends \Codeception\Actor
     public function loginWith($username, $password)
     {
         $this->sendPOST('/login', compact('username', 'password'));
+        $this->seeResponseIsJson();
+        $this->seeResponseCodeIs(200);
         $token = $this->grabDataFromResponseByJsonPath('token')[0];
         $this->amBearerAuthenticated($token);
     }

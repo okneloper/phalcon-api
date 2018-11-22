@@ -93,7 +93,7 @@ class Authenticate implements \Phalcon\Mvc\Micro\MiddlewareInterface
 
         $validator = new Validator([
             $application->di->get(SignatureValidator::class),
-            // also validate the expiration
+            // @todo also validate the expiration
             // new ExpirationValidator(),
         ]);
 
