@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use MongoDB\BSON\ObjectId;
+
 /**
  * Base model class
  */
@@ -15,6 +17,9 @@ abstract class Model
      */
     public function __construct($attributes)
     {
+        if (isset($attributes['_id']) && $attributes['_id'] instanceof ObjectId) {
+            $attributes['_id'] = (string)$attributes['_id'];
+        }
         $this->attributes = $attributes;
     }
 

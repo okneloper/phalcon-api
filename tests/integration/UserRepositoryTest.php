@@ -4,7 +4,7 @@ use App\Models\Repositories\UserRepository;
 
 class UserRepositoryTest extends \Codeception\Test\Unit
 {
-    protected $mongo;
+    use \Helper\SeedsDatabase;
 
     /**
      * @var UserRepository
@@ -13,32 +13,14 @@ class UserRepositoryTest extends \Codeception\Test\Unit
 
     protected function _before()
     {
+        $this->seedDatabase();
+
         $this->repository = \App\Models\Repositories\UserRepository::getInstance();
-
-        $this->mongo = \Phalcon\Di::getDefault()->get('mongo');
-
-        $this->mongo->users->insertMany([
-            [
-                'username' => 'camilla@example.com',
-                'name' => 'Camilla Kacey',
-                'type' => 'admin',
-            ],
-            [
-                'username' => 'john@example.com',
-                'name' => 'John Allen',
-                'type' => 'guest',
-            ],
-            [
-                'username' => 'user@domain.com',
-                'name' => 'Grenville Rowland',
-                'type' => 'guest',
-            ]
-        ]);
     }
 
     protected function _after()
     {
-        $this->mongo->users->deleteMany([]);
+        $this->cleanDatabase();
     }
 
 
