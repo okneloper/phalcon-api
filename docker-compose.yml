@@ -13,6 +13,8 @@ services:
 
     php:
         build: './docker/php'
+        environment:
+            API_HOST: nginx
         volumes:
             - .:/usr/share/nginx/html
 

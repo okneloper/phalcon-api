@@ -12,3 +12,5 @@ settings:
     # each bootstrap file should be
     # inside a suite directory.
     bootstrap: _bootstrap.php
+params:
+    - env # load params from environment vars
