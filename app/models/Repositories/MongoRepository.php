@@ -5,6 +5,7 @@ namespace App\Models\Repositories;
 use App\Models\Model;
 use MongoDB\Client;
 use MongoDB\Collection;
+use MongoDB\Database;
 
 /**
  * Created 19/11/2018
@@ -14,16 +15,28 @@ abstract class MongoRepository implements Repository
 {
     abstract public function newModel($attributes);
 
-    protected $collection;
+    /**
+     * MongoDB Collection name
+     * @var string
+     */
+    protected $table;
 
-    protected $model_class;
+    /**
+     * MongoDB collection instance
+     * @var Collection
+     */
+    protected $collection;
 
     /**
      * MongoRepository constructor.
      * @param $collection
      */
-    public function __construct(Collection $collection)
+    public function __construct(Database $db)
     {
+        if (!$this->table) {
+            throw new \BadMethodCallException('Collection name $this->table is not set');
+        }
+        $collection = $db->{$this->table};
         $this->collection = $collection;
     }
 

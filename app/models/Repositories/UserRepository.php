@@ -2,7 +2,6 @@
 
 namespace App\Models\Repositories;
 
-use App\Models\Model;
 use App\Models\User;
 
 /**
@@ -11,6 +10,8 @@ use App\Models\User;
  */
 class UserRepository extends BaseRepository
 {
+    protected $table = 'users';
+
     public function newModel($attributes)
     {
         return new User($attributes);

@@ -2,11 +2,22 @@
 
 namespace App\Models\Repositories;
 
+use MongoDB\Collection;
+use Phalcon\Di;
+
 /**
- * Created 19/11/2018
- * @author Aleksey Lavrinenko <aleksey.lavrinenko@mtcmedia.co.uk>
+ * Base repository class
  */
 abstract class BaseRepository extends MongoRepository
 {
-    //
+    /**
+     * Returns a new instance of the repository
+     * @return BaseRepository
+     */
+    public static function getInstance()
+    {
+        $mongo = Di::getDefault()->get('mongo');
+
+        return new static($mongo);
+    }
 }
