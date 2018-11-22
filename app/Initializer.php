@@ -61,6 +61,7 @@ class Initializer
         $index->setHandler(\MessagesController::class, true);
         $index->setPrefix('/messages');
         $index->get('/', 'indexAction');
+        $index->post('/', 'storeAction');
         $app->mount($index);
 
         // Index handler
