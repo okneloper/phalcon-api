@@ -1,23 +1,28 @@
 <?php
 
-use App\Models\Repositories\MongoRepository;
-
 class UserRepositoryTest extends \Codeception\Test\Unit
 {
     protected $mongo;
 
     protected function _before()
     {
-        $this->mongo = \Helper\Mongo::getDb();
+        $this->mongo = \Phalcon\Di::getDefault()->get('mongo');
 
         $this->mongo->users->insertMany([
             [
-                'username' => 'user@example.com',
+                'username' => 'camilla@example.com',
                 'name' => 'Camilla Kacey',
+                'type' => 'admin',
+            ],
+            [
+                'username' => 'john@example.com',
+                'name' => 'John Allen',
+                'type' => 'guest',
             ],
             [
                 'username' => 'user@domain.com',
                 'name' => 'Grenville Rowland',
+                'type' => 'guest',
             ]
         ]);
     }
@@ -30,7 +35,7 @@ class UserRepositoryTest extends \Codeception\Test\Unit
 
     public function testFinds()
     {
-        $repository = new App\Models\Repositories\UserRepository($this->mongo->users);
+        $repository = \App\Models\Repositories\UserRepository::getInstance();
 
         $users = $repository->find([
             'username' => 'user@domain.com',
@@ -44,6 +49,14 @@ class UserRepositoryTest extends \Codeception\Test\Unit
 
     public function testFindsFirst()
     {
+        $repository = \App\Models\Repositories\UserRepository::getInstance();
 
+        $user = $repository->findFirst([
+            'type' => 'guest',
+        ]);
+
+        $this->assertInstanceOf(\App\Models\User::class, $user);
+
+        $this->assertEquals('guest', $user->type);
     }
 }
