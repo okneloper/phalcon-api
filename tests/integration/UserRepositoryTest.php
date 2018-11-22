@@ -1,11 +1,20 @@
 <?php
 
+use App\Models\Repositories\UserRepository;
+
 class UserRepositoryTest extends \Codeception\Test\Unit
 {
     protected $mongo;
 
+    /**
+     * @var UserRepository
+     */
+    protected $repository;
+
     protected function _before()
     {
+        $this->repository = \App\Models\Repositories\UserRepository::getInstance();
+
         $this->mongo = \Phalcon\Di::getDefault()->get('mongo');
 
         $this->mongo->users->insertMany([
@@ -35,9 +44,7 @@ class UserRepositoryTest extends \Codeception\Test\Unit
 
     public function testFinds()
     {
-        $repository = \App\Models\Repositories\UserRepository::getInstance();
-
-        $users = $repository->find([
+        $users = $this->repository->find([
             'username' => 'user@domain.com',
         ]);
 
@@ -49,9 +56,7 @@ class UserRepositoryTest extends \Codeception\Test\Unit
 
     public function testFindsFirst()
     {
-        $repository = \App\Models\Repositories\UserRepository::getInstance();
-
-        $user = $repository->findFirst([
+        $user = $this->repository->findFirst([
             'type' => 'guest',
         ]);
 
@@ -62,12 +67,18 @@ class UserRepositoryTest extends \Codeception\Test\Unit
 
     public function testFindFirstReturnsNullOnNoResult()
     {
-        $repository = \App\Models\Repositories\UserRepository::getInstance();
-
-        $user = $repository->findFirst([
+        $user = $this->repository->findFirst([
             'type' => 'god',
         ]);
 
         $this->assertNull($user);
+    }
+
+    public function testFindsByEmail()
+    {
+        $user = $this->repository->findByUsername('john@example.com');
+
+        $this->assertInstanceOf(\App\Models\User::class, $user);
+        $this->assertEquals('john@example.com', $user->username);
     }
 }
