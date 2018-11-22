@@ -32,4 +32,13 @@ abstract class Model
     {
         $this->attributes[$attr] = $value;
     }
+
+    /**
+     * Returns array representation of the object
+     * @return array
+     */
+    public function toArray()
+    {
+        return $this->attributes;
+    }
 }

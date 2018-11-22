@@ -17,6 +17,10 @@ class UserRepository extends BaseRepository
         return new User($attributes);
     }
 
+    /**
+     * @param string $username
+     * @return User
+     */
     public function findByUsername(string $username)
     {
         return $this->findFirst(compact('username'));

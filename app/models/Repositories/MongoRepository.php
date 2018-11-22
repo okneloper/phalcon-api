@@ -74,4 +74,11 @@ abstract class MongoRepository implements Repository
 
         return $this->newModel($result->getArrayCopy());
     }
+
+    public function store(Model $model)
+    {
+        $result = $this->collection->insertOne($model->toArray());
+
+        return $result->getInsertedId()->__toString();
+    }
 }

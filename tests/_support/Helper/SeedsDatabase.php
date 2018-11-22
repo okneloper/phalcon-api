@@ -2,10 +2,15 @@
 
 namespace Helper;
 
+use MongoDB\Database;
+
 /**
  */
 trait SeedsDatabase
 {
+    /**
+     * @var Database
+     */
     protected $mongo;
 
     public function seedDatabase()
