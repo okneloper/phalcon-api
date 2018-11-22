@@ -59,4 +59,15 @@ class UserRepositoryTest extends \Codeception\Test\Unit
 
         $this->assertEquals('guest', $user->type);
     }
+
+    public function testFindFirstReturnsNullOnNoResult()
+    {
+        $repository = \App\Models\Repositories\UserRepository::getInstance();
+
+        $user = $repository->findFirst([
+            'type' => 'god',
+        ]);
+
+        $this->assertNull($user);
+    }
 }

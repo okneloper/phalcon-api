@@ -52,6 +52,7 @@ abstract class MongoRepository implements Repository
         $models = [];
 
         foreach ($this->collection->find($parameters) as $result) {
+            d($result);
             $models[] = $this->newModel($result->getArrayCopy());
         }
 
@@ -63,12 +64,16 @@ abstract class MongoRepository implements Repository
      * @param null $parameters
      * @return mixed
      */
-    public function findFirst($parameters = null):Model
+    public function findFirst($parameters = null): ?Model
     {
         $parameters = (array)$parameters;
 
-        $result = $this->collection->findOne($parameters)->getArrayCopy();
+        $result = $this->collection->findOne($parameters);
 
-        return $this->newModel($result);
+        if ($result === null) {
+            return null;
+        }
+
+        return $this->newModel($result->getArrayCopy());
     }
 }
