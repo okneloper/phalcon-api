@@ -22,6 +22,7 @@ class GetMessagesCest
 
         $I->seeResponseIsJson();
 
-        $I->seeResponseJsonMatchesJsonPath('data.0');
+        $I->seeResponseJsonMatchesJsonPath('data');
+        #$I->seeResponseJsonMatchesJsonPath('data.0');
     }
 }

@@ -4,7 +4,7 @@ namespace App\Collections;
 
 /**
  */
-class Collection implements \Countable, \ArrayAccess
+class Collection implements \Countable, \ArrayAccess, \JsonSerializable
 {
     /**
      * @var array
@@ -90,5 +90,17 @@ class Collection implements \Countable, \ArrayAccess
     public function offsetUnset($offset)
     {
         unset($this->items[$offset]);
+    }
+
+    /**
+     * Specify data which should be serialized to JSON
+     * @link https://php.net/manual/en/jsonserializable.jsonserialize.php
+     * @return mixed data which can be serialized by <b>json_encode</b>,
+     * which is a value of any type other than a resource.
+     * @since 5.4.0
+     */
+    public function jsonSerialize()
+    {
+        return $this->items;
     }
 }

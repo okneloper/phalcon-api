@@ -10,12 +10,10 @@ class MessagesController extends \Phalcon\Mvc\Controller
     {
         $user = \App\Auth::getUser();
 
-        //$messages = MessagesRepository::getInstance()->
+        $messages = \App\Models\Repositories\MessageRepository::getInstance()->findByUser($user);
 
         return [
-            'data' => [
-                []
-            ],
+            'data' => $messages,
         ];
     }
 }
