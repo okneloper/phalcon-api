@@ -2,9 +2,8 @@
 
 namespace App\Models\Repositories;
 
+use App\Collections\Collection;
 use App\Models\Model;
-use MongoDB\Client;
-use MongoDB\Collection;
 use MongoDB\Database;
 
 /**
@@ -45,18 +44,17 @@ abstract class MongoRepository implements Repository
      * @param array|null $parameters
      * @return array
      */
-    public function find(array $parameters = null):array
+    public function find(array $parameters = null): Collection
     {
         $parameters = (array)$parameters;
 
         $models = [];
 
         foreach ($this->collection->find($parameters) as $result) {
-            d($result);
             $models[] = $this->newModel($result->getArrayCopy());
         }
 
-        return $models;
+        return new Collection($models);
     }
 
     /**

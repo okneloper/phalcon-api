@@ -2,6 +2,7 @@
 
 namespace App\Models\Repositories;
 
+use App\Collections\Collection;
 use App\Models\Model;
 
 /**
@@ -13,7 +14,7 @@ interface Repository
      * @param array|null $parameters
      * @return array
      */
-    public function find(array $parameters = null): array;
+    public function find(array $parameters = null): Collection;
 
     /**
      * Returns first model matching the conditions

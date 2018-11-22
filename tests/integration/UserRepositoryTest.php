@@ -49,7 +49,7 @@ class UserRepositoryTest extends \Codeception\Test\Unit
         ]);
 
         $this->assertNotNull($users);
-        $this->assertInternalType('array', $users);
+        $this->assertInstanceOf(\App\Collections\Collection::class, $users);
         $this->assertCount(1, $users);
         $this->assertInstanceOf(\App\Models\Model::class, $users[0]);
     }
